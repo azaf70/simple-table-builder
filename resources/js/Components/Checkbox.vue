@@ -1,3 +1,12 @@
+<template>
+    <input
+        v-model="proxyChecked"
+        type="checkbox"
+        :value="value"
+        class="rounded dark:bg-green-500 border-green-500 dark:border-gray-700 text-green-500 shadow-sm focus:ring-green-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+    >
+</template>
+
 <script setup>
 import { computed } from 'vue';
 
@@ -23,12 +32,3 @@ const proxyChecked = computed({
     },
 });
 </script>
-
-<template>
-    <input
-        type="checkbox"
-        :value="value"
-        v-model="proxyChecked"
-        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-    />
-</template>

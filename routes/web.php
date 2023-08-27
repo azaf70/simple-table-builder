@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TableTemplateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +34,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::name('table-template.')->group(function () {
+        Route::get('/table-template', [TableTemplateController::class, 'index'])->name('index');
+//        Route::get('/table-template/create', [TableTemplateController::class, 'create'])->name('create');
+        Route::post('/table-template', [TableTemplateController::class, 'store'])->name('store');
+//        Route::get('/table-template/{table}', [TableTemplateController::class, 'show'])->name('show');
+//        Route::get('/table-template/{table}/edit', [TableTemplateController::class, 'edit'])->name('edit');
+//        Route::put('/table-template/{table}', [TableTemplateController::class, 'update'])->name('update');
+//        Route::delete('/table-template/{table}', [TableTemplateController::class, 'destroy'])->name('destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
