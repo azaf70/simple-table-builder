@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('table_templates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
+            $table->string('name')->nullable();
             $table->json('column_data')->nullable();
             $table->json('row_data')->nullable();
             $table->timestamps();

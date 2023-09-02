@@ -23,10 +23,18 @@ class TableTemplateController extends Controller
         ]);
     }
     public function store(Request $request) {
+        $data = [];
+        foreach ($request->columnNames as $key => $columnName) {
+            $data[] = [
+                'name' => $columnName,
+                'type' => $request->columnTypes[$key]
+            ];
+        }
+
         $tableTemplate = new TableTemplate();
+        $tableTemplate->name = $request->name;
         $tableTemplate->user_id = auth()->user()->id;
-        $tableTemplate->column_data = json_encode($request->columnNames);
-        $tableTemplate->row_data = json_encode($request->rowNames);
+        $tableTemplate->column_data = json_encode($data);
         $tableTemplate->save();
 
         return redirect()->route('table-template.index');

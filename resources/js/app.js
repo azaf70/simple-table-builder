@@ -15,6 +15,12 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 
 library.add(fas, far);
 
+//PrimeVue
+import PrimeVue from 'primevue/config';
+import Tailwind from 'primevue/passthrough/tailwind';
+import 'primevue/resources/themes/tailwind-light/theme.css';
+import 'primeicons/primeicons.css';
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -24,6 +30,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(PrimeVue, { unstyled: false, pt: Tailwind, ripple: true })
             .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
     },
