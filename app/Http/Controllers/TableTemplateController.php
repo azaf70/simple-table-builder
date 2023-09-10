@@ -27,7 +27,7 @@ class TableTemplateController extends Controller
         $tableTemplate->column_data = json_decode($tableTemplate->column_data);
         $tableTemplate->row_data = json_decode($tableTemplate->row_data);
 
-        return Inertia::render('TableTemplate/Edit', [
+        return Inertia::render('Table/Edit', [
             'tableTemplate' => $tableTemplate->toArray()
         ]);
     }

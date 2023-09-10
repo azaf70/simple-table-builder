@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RowController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\TableTemplateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +37,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //use resource with only index, create, store, show
+    Route::resource('table', TableController::class)->only(['index', 'edit', 'destroy']);
+    Route::resource('column', ColumnController::class)->only(['store', 'edit', 'destroy']);
+//    Route::resource('row', RowController::class)->only(['store', 'edit', 'destroy']);
+    Route::name('row.')->group(function () {
+        Route::get('/row/{table}/create', [RowController::class, 'create'])->name('create');
+        Route::get('/row/{row}/edit', [RowController::class, 'edit'])->name('edit');
+        Route::post('/row/store', [RowController::class, 'store'])->name('store');
+        Route::put('/row/{row}', [RowController::class, 'update'])->name('update');
+    });
 
     Route::name('table-template.')->group(function () {
         Route::get('/table-template', [TableTemplateController::class, 'index'])->name('index');
