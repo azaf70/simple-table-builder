@@ -13,7 +13,12 @@ class Column extends Model
     protected $fillable = [
         'name',
         'type',
+        'validation_rules',
         'table_id',
+    ];
+
+    protected $casts = [
+        'validation_rules' => 'json',
     ];
 
     public function rows()

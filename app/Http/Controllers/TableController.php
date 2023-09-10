@@ -33,8 +33,28 @@ class TableController extends Controller
 
         $tableData = Table::where('user_id', auth()->user()->id)->get();
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Table/Index', [
             'tableData' => $tableData,
+        ]);
+    }
+
+    public function show(Table $table) {
+        $table->load('columns');
+        $table->columns->load('rows');
+        $table->columns = $table->columns->map(function ($column) {
+            $column->rows = $column->rows->map(function ($row) {
+                return [
+                    'value' => $row->value,
+                ];
+            });
+            return [
+                'name' => $column->name,
+                'rows' => $column->rows,
+            ];
+        });
+
+        return Inertia::render('Table/Show', [
+            'tableData' => $table,
         ]);
     }
 
@@ -51,6 +71,13 @@ class TableController extends Controller
      */
     public function destroy(Table $table)
     {
-        //
+        $table->delete();
+        $table->columns()->each(function ($column) {
+            $column->rows()->delete();
+            $column->delete();
+        });
+
+        return redirect()->route('table.index');
+
     }
 }

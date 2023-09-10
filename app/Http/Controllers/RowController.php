@@ -24,6 +24,10 @@ class RowController extends Controller
     public function create(Table $table)
     {
         $columns = Column::where('table_id', $table->id)->get();
+        $columns = $columns->map(function ($column) {
+            $column->validation_rules = json_decode($column->validation_rules);
+            return $column;
+        });
 
         return Inertia::render('Table/Rows/Create', [
             'columns' => $columns->toArray(),
@@ -41,7 +45,7 @@ class RowController extends Controller
     {
         $rules = [];
         foreach ($request->items as $index => $item) {
-            $rules['items.' . $index . '.value'] = $request->items[$index]['validation_rule'];
+            $rules['items.' . $index . '.value'] = $request->items[$index]['validation_rules'];
         }
         //validate with messages
         $request->validate($rules, [

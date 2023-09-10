@@ -1,6 +1,6 @@
 <template>
     <Head title="Table Builder" />
-    <main class="grow flex h-screen">
+    <main class="grow flex h-screen bg-gradient-to-bl from-gray-700/50 to-blue-500">
         <section class="py-4 bg-white dark:bg-gray-900 lg:pt-12 lg:pb-16 m-auto">
             <div class="px-4 mx-auto max-w-8xl lg:px-4 lg:text-center">
                 <font-awesome-icon
@@ -17,15 +17,23 @@
                 <div class="flex flex-col mb-8 md:flex-row lg:justify-center">
                     <Link
                         href="/login"
-                        class="text-white bg-green-500 hover:bg-green-700 dark:bg-green-600 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-base px-6 py-2.5 text-center md:mr-5 mb-3 md:mb-0 inline-flex items-center justify-center"
                     >
-                        Login
+                        <Button
+                            label="Login"
+                            icon="pi pi-sign-in"
+                            class="mr-5 mb-3 md:mb-0"
+                            @click="route('login')"
+                        />
                     </Link>
                     <Link
                         href="/register"
-                        class="text-gray-600 bg-white-100 hover:bg-gray-100 hover:text-green-600 border border-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700 font-medium rounded-lg text-base px-6 py-2.5 text-center inline-flex justify-center items-center"
                     >
-                        Register
+                        <Button
+                            label="Register"
+                            icon="pi pi-user-plus"
+                            class="mr-5 mb-3 md:mb-0"
+                            severity="secondary"
+                        />
                     </Link>
                 </div>
             </div>
@@ -36,6 +44,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Button from 'primevue/button';
 
 </script>

@@ -8,16 +8,19 @@
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo class="block h-12" size="lg"/>
+                                <Link :href="route('table.index')">
+                                    <ApplicationLogo
+                                        class="block h-12"
+                                        size="lg"
+                                    />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('table.index')"
+                                    :active="route().current('table.index')"
                                 >
                                     Dashboard
                                 </NavLink>

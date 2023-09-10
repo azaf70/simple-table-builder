@@ -33,34 +33,41 @@
                                     Create Table
                                 </h3>
                             </div>
-                            <div class="card flex align-items-center justify-content-center">
-                                <Card
-                                    v-for="(item, index) in tableData"
-                                    :key="index"
-                                >
-                                    <template #title>
-                                        {{ item.name }}
-                                    </template>
-                                    <template #footer>
-                                        <a
-                                            class="p-button-success p-button-rounded"
-                                            size="small"
-                                            icon="pi pi-check"
-                                            label="View"
+
+                            <Link
+                                v-for="(item, index) in tableData"
+                                :key="index"
+                                class="w-full cursor-pointer max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                                :href="route('table.show', item.id)"
+                            >
+                                <div class="flex flex-col items-center py-8">
+                                    <font-awesome-icon
+                                        icon="table"
+                                        size="3x"
+                                        class="mx-auto text-indigo-600"
+                                    />
+                                    <span class="text-lg my-2 font-medium text-gray-900 dark:text-white">{{ item.name }}</span>
+                                    <div class="flex mt-4 space-x-3 md:mt-2">
+                                        <Link
                                             :href="route('row.create', item.id)"
                                         >
-                                            Edit
-                                        </a>
+                                            <Button
+                                                size="small"
+                                                icon="pi pi-check"
+                                                label="Add rows"
+                                            />
+                                        </Link>
                                         <Button
                                             size="small"
                                             icon="pi pi-times"
                                             label="Delete"
                                             severity="danger"
                                             style="margin-left: 0.5em"
+                                            @click.prevent="deleteTable(item.id)"
                                         />
-                                    </template>
-                                </Card>
-                            </div>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -111,32 +118,48 @@
                 <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
                     Rows can be added later dynamically
                 </p>
-                <div
+                <section
                     v-if="showGeneratedTable"
-                    class="card flex gap-x-8 p-fluid mt-6"
                 >
-                    <div class="flex gap-x-8">
-                        <div
-                            v-for="(column, index) in columns"
-                            class="flex flex-col"
-                        >
-                            <label for="username">Column name ({{ index + 1 }})</label>
-                            <InputText
-                                id="username"
-                                v-model="form.columnNames[index]"
-                                aria-describedby="username-help"
-                            />
-                            <div class="card flex justify-content-center mt-3">
-                                <Dropdown
-                                    v-model="form.columnTypes[index]"
-                                    :options="colTypes"
-                                    placeholder="Select a column type"
-                                    class="w-full md:w-14rem"
+                    <div class="mx-auto max-w-screen-xl">
+                        <div class="mt-4 max-w-screen-sm">
+                            <h2 class="text-xl tracking-tight font-semibold text-gray-900">
+                                Please fill in the column details
+                            </h2>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-12">
+                            <div
+                                v-for="(column, index) in columns"
+                                :key="index"
+                                class="p-4 rounded-lg shadow-md my-2 bg-gray-100"
+                            >
+                                <label
+                                    class="block"
+                                >Column name ({{ index + 1 }})</label>
+                                <InputText
+                                    id="username"
+                                    v-model="form.columnNames[index]"
+                                    class="w-full"
+                                    aria-describedby="username-help"
                                 />
+                                <div class="card flex w-full gap-x-12 justify-content-center mt-3">
+                                    <Dropdown
+                                        v-model="form.columnTypes[index]"
+                                        :options="colTypes"
+                                        placeholder="Select input type"
+                                    />
+                                    <MultiSelect
+                                        v-model="form.columnValidationRules[index]"
+                                        display="chip"
+                                        :options="validationRules"
+                                        placeholder="Select validation rules"
+                                        class="w-full md:w-20rem"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
                 <Button
                     label="Create Tables"
                     :icon="isTableOpen ? 'pi pi-spin pi-spinner' : 'pi pi-table'"
@@ -147,20 +170,22 @@
                 </Button>
             </div>
         </Sidebar>
+        <Toast />
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Sidebar from 'primevue/sidebar';
 import Button from 'primevue/button';
-import Dropdown from 'primevue/listbox';
+import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
-import Card from 'primevue/card';
+import MultiSelect from 'primevue/multiselect';
 import { useToast } from 'primevue/usetoast';
+import Toast from 'primevue/toast';
 
 defineProps({
     tableData: {
@@ -171,7 +196,6 @@ defineProps({
 
 const isTableOpen = ref(false);
 const newColumns = ref();
-const newRows = ref();
 const columns = ref([]);
 const rows = ref([]);
 const isTableGenerating = ref(false);
@@ -184,6 +208,7 @@ const form = useForm({
     columns: [],
     columnNames: [],
     columnTypes: [],
+    columnValidationRules: [],
 });
 
 const colTypes = ref([
@@ -191,9 +216,22 @@ const colTypes = ref([
     'Number',
     'Date',
     'Time',
-    'DateTime',
-    'Boolean',
+    'Date',
+    'Color',
     'Email',
+    'Password',
+]);
+
+const validationRules = ref([
+    'Required',
+    'Boolean',
+    'Numeric',
+    'Integer',
+    'Email',
+    'String',
+    'Array',
+    'File',
+    'Image',
 ]);
 
 function buildTable() {
@@ -220,12 +258,26 @@ function submitTableData() {
     form
         .post(route('column.store'), {
             onSuccess: () => {
-                // isTableOpen.value = false;
-                // showGeneratedTable.value = false;
+                isTableOpen.value = false;
+                showGeneratedTable.value = false;
                 form.reset();
                 columns.value = [];
                 rows.value = [];
                 visible.value = false;
+            },
+        });
+}
+
+function deleteTable(id) {
+    form
+        .delete(route('table.destroy', id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.add({
+                    severity: 'success',
+                    summary: 'Table deleted successfully',
+                    life: 5000,
+                });
             },
         });
 }

@@ -43,7 +43,6 @@
                             v-if="item.field !== 'Created At' && item.field !== 'Deleted At'"
                             class="my-4"
                         >
-                            {{ form.errors }}
                             <label
                                 class="block"
                                 :for="item.field"

@@ -34,19 +34,20 @@ class ColumnController extends Controller
         foreach ($request->columnNames as $key => $columnName) {
             $data[] = [
                 'name' => $columnName,
-                'type' => $request->columnTypes[$key]
+                'type' => $request->columnTypes[$key],
+                'validation_rules' => $request->columnValidationRules[$key]
             ];
         }
-
         foreach ($data as $column) {
             Column::create([
                 'name' => $column['name'],
                 'type' => $column['type'],
+                'validation_rules' => json_encode($column['validation_rules']),
                 'table_id' => $table->id,
             ]);
         }
 
-        return redirect()->route('table-template.index');
+        return redirect()->route('table.index');
     }
 
     /**

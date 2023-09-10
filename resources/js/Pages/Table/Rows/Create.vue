@@ -7,12 +7,11 @@
             </h2>
         </template>
 
-
         <div class="container px-8">
             <div class="row">
-                <h1 class="text-white text-xl py-4">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight py-4">
                     {{ tableData.name }}
-                </h1>
+                </h2>
                 <Toolbar class="mb-4">
                     <template #start>
                         <Button
@@ -45,6 +44,12 @@
                                     scope="col"
                                     class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
                                 >
+                                    Validation Rules
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
+                                >
                                     Created At
                                 </th>
                             </tr>
@@ -66,6 +71,12 @@
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800"
                                 >
                                     {{ col.type }}
+                                </th>
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800"
+                                >
+                                    {{ col.validation_rules.flatMap(rule => rule).join(', ') }}
                                 </th>
                                 <th
                                     scope="row"
@@ -170,7 +181,7 @@ onMounted(() => {
             column_id: column.id,
             column: column.name,
             type: column.type,
-            validation_rule: column.validation_rule,
+            validation_rules: column.validation_rules,
             value: '',
         });
     });

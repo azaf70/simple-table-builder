@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //use resource with only index, create, store, show
-    Route::resource('table', TableController::class)->only(['index', 'edit', 'destroy']);
+    Route::resource('table', TableController::class)->only(['index', 'show', 'edit', 'destroy']);
     Route::resource('column', ColumnController::class)->only(['store', 'edit', 'destroy']);
 //    Route::resource('row', RowController::class)->only(['store', 'edit', 'destroy']);
     Route::name('row.')->group(function () {
