@@ -22,7 +22,21 @@ class TableTemplateController extends Controller
             'tableTemplates' => $tableTemplates
         ]);
     }
+
+    public function edit(TableTemplate $tableTemplate) {
+        $tableTemplate->column_data = json_decode($tableTemplate->column_data);
+        $tableTemplate->row_data = json_decode($tableTemplate->row_data);
+
+        return Inertia::render('TableTemplate/Edit', [
+            'tableTemplate' => $tableTemplate->toArray()
+        ]);
+    }
     public function store(Request $request) {
+
+        //check if request is not empty
+        //loop through the items
+        dd($request->all());
+
         $data = [];
         foreach ($request->columnNames as $key => $columnName) {
             $data[] = [
@@ -38,5 +52,15 @@ class TableTemplateController extends Controller
         $tableTemplate->save();
 
         return redirect()->route('table-template.index');
+    }
+
+    private function determineValidation($type) {
+        return match ($type) {
+            'String', 'Text' => 'required|string',
+            'Email' => 'required|email',
+            'Number' => 'required|numeric',
+            'Date' => 'required|date',
+            default => 'required',
+        };
     }
 }

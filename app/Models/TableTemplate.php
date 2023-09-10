@@ -9,4 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TableTemplate extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $table = 'table_templates';
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
 }

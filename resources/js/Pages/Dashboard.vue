@@ -108,24 +108,39 @@
                             >
                                 <font-awesome-icon
                                     icon="add"
-                                    class="w-12 h-12 mx-auto text-green-500"
+                                    class="w-12 h-12 mx-auto text-indigo-600"
                                 />
                                 <h3 class="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">
                                     Create Table
                                 </h3>
                             </div>
-                            <div
-                                v-for="(item, index) in tableTemplates"
-                                class="cursor-pointer block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light"
-                            >
-                                <font-awesome-icon
-                                    icon="table"
-                                    class="w-12 h-12 mx-auto text-green-500"
-                                />
-
-                                <h3 class="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">
-                                    {{ item.name }}
-                                </h3>
+                            <div class="card flex align-items-center justify-content-center">
+                                <Card
+                                    v-for="(item, index) in tableTemplates"
+                                    :key="index"
+                                >
+                                    <template #title>
+                                        {{ item.name }}
+                                    </template>
+                                    <template #footer>
+                                        <a
+                                            class="p-button-success p-button-rounded"
+                                            size="small"
+                                            icon="pi pi-check"
+                                            label="View"
+                                            :href="route('table-template.edit', item.id)"
+                                        >
+                                            View
+                                        </a>
+                                        <Button
+                                            size="small"
+                                            icon="pi pi-times"
+                                            label="Delete"
+                                            severity="danger"
+                                            style="margin-left: 0.5em"
+                                        />
+                                    </template>
+                                </Card>
                             </div>
                         </div>
                     </div>
@@ -172,7 +187,8 @@ import Sidebar from 'primevue/sidebar';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/listbox';
 import InputText from 'primevue/inputtext';
-
+import Card from 'primevue/card';
+import { useToast } from 'primevue/usetoast';
 
 defineProps({
     tableTemplates: {
@@ -189,6 +205,7 @@ const rows = ref([]);
 const isTableGenerating = ref(false);
 const showGeneratedTable = ref(false);
 const visible = ref(false);
+const toast = useToast();
 
 const form = useForm({
     name: '',

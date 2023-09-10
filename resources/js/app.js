@@ -18,6 +18,7 @@ library.add(fas, far);
 //PrimeVue
 import PrimeVue from 'primevue/config';
 import Tailwind from 'primevue/passthrough/tailwind';
+import ToastService from 'primevue/toastservice';
 import 'primevue/resources/themes/tailwind-light/theme.css';
 import 'primeicons/primeicons.css';
 
@@ -30,6 +31,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(ToastService)
             .use(PrimeVue, { unstyled: false, pt: Tailwind, ripple: true })
             .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
