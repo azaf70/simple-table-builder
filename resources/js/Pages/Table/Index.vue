@@ -1,6 +1,8 @@
 <template>
     <Head title="Dashboard" />
     <AuthenticatedLayout>
+        <Toast />
+        <ConfirmDialog />
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 Dashboard
@@ -37,7 +39,7 @@
                             <Link
                                 v-for="(item, index) in tableData"
                                 :key="index"
-                                class="w-full cursor-pointer max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                                class="w-full cursor-pointer px-12 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                                 :href="route('table.show', item.id)"
                             >
                                 <div class="flex flex-col items-center py-8">
@@ -47,23 +49,22 @@
                                         class="mx-auto text-indigo-600"
                                     />
                                     <span class="text-lg my-2 font-medium text-gray-900 dark:text-white">{{ item.name }}</span>
-                                    <div class="flex mt-4 space-x-3 md:mt-2">
+                                    <div class="flex flex-row mt-4 md:mt-2">
                                         <Link
                                             :href="route('row.create', item.id)"
                                         >
                                             <Button
                                                 size="small"
-                                                icon="pi pi-check"
-                                                label="Add rows"
+                                                icon="pi pi-plus"
+                                                label="Row"
                                             />
                                         </Link>
                                         <Button
                                             size="small"
                                             icon="pi pi-times"
-                                            label="Delete"
                                             severity="danger"
                                             style="margin-left: 0.5em"
-                                            @click.prevent="deleteTable(item.id)"
+                                            @click.prevent="deleteTable(item.id, item.name)"
                                         />
                                     </div>
                                 </div>
@@ -185,6 +186,8 @@ import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import { useToast } from 'primevue/usetoast';
+import { useConfirm } from 'primevue/useconfirm';
+import ConfirmDialog from 'primevue/confirmdialog';
 import Toast from 'primevue/toast';
 
 defineProps({
@@ -211,12 +214,15 @@ const form = useForm({
     columnValidationRules: [],
 });
 
+const confirm = useConfirm();
+
 const colTypes = ref([
     'Text',
     'Number',
     'Date',
     'Time',
     'Date',
+    'Boolean',
     'Color',
     'Email',
     'Password',
@@ -268,17 +274,28 @@ function submitTableData() {
         });
 }
 
-function deleteTable(id) {
-    form
-        .delete(route('table.destroy', id), {
-            preserveScroll: true,
-            onSuccess: () => {
-                toast.add({
-                    severity: 'success',
-                    summary: 'Table deleted successfully',
-                    life: 5000,
+function deleteTable(id, tableName) {
+    confirm.require({
+        message: ' Are you sure you want to delete ' + tableName + ' ?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            form
+                .delete(route('table.destroy', id), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        toast.add({
+                            severity: 'success',
+                            summary: 'Table deleted successfully',
+                            life: 5000,
+                        });
+                    },
                 });
-            },
-        });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
 }
 </script>

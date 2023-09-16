@@ -9,6 +9,8 @@
                 :value="dataToDisplay"
                 striped-rows
                 table-style="min-width: 50rem"
+                :rows="11"
+                paginator
             >
                 <Column
                     v-for="(column, index) in tableData.columns"

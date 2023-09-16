@@ -109,7 +109,18 @@
                                 class="block"
                                 :for="item.column"
                             >{{ item.column }}</label>
+                            <Dropdown
+                                v-if="item.type === 'Boolean'"
+                                :id="item.column"
+                                v-model="item.value"
+                                :options="[true, false]"
+                                required="true"
+                                autofocus
+                                class="mt-0 block w-full sm:text-sm border-gray-300 rounded-md"
+                                :class="{'p-invalid': form.errors['items.' + index + '.value']}"
+                            />
                             <InputText
+                                v-else
                                 :id="item.column"
                                 v-model="item.value"
                                 :type="item.type"
@@ -153,6 +164,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Toolbar from 'primevue/toolbar';
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import { onMounted, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Toast from 'primevue/toast';
