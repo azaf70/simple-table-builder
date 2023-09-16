@@ -67,7 +67,7 @@ class RowController extends Controller
             $row->save();
         }
 
-        return redirect()->back();
+        return redirect()->route('row.create', $request->table_id);
     }
 
     /**

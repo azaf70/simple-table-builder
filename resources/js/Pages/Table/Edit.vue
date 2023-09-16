@@ -94,12 +94,10 @@ import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
-import _ from 'lodash';
-
 
 const props = defineProps({
     tableTemplate: {
-        type: Object,
+        type: Array,
         required: true,
     },
 });
@@ -143,6 +141,7 @@ const submit = () => {
     form.post(route('table-template.store'), {
         preserveScroll: true,
         onSuccess: () => {
+            form.items = [];
             toast.add({ severity: 'success', summary: 'Success', detail: 'Product Created', life: 3000 });
             hideDialog();
         },

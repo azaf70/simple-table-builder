@@ -200,6 +200,9 @@ const submit = () => {
         preserveScroll: true,
         onSuccess: () => {
             toast.add({ severity: 'success', summary: 'Success', detail: 'Product Created', life: 3000 });
+            form.items.forEach((item) => {
+                item.value = '';
+            });
             hideDialog();
         },
         onError: (error) => {
