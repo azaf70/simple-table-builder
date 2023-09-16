@@ -83,7 +83,7 @@
                     Table builder
                 </h3>
             </div>
-            <div class="p-6">
+            <div class="p-6 bg-gray-100 rounded-b-md">
                 <div class="my-2 gap-8">
                     <div class="flex gap-2">
                         <div class="flex flex-col">
@@ -143,7 +143,7 @@
                                     class="w-full"
                                     aria-describedby="username-help"
                                 />
-                                <div class="card flex w-full gap-x-12 justify-content-center mt-3">
+                                <div class="card flex w-full gap-x-4 justify-content-center mt-2">
                                     <Dropdown
                                         v-model="form.columnTypes[index]"
                                         :options="colTypes"
@@ -154,9 +154,14 @@
                                         display="chip"
                                         :options="validationRules"
                                         placeholder="Select validation rules"
+                                        :max-selected-labels="1"
                                         class="w-full md:w-20rem"
+                                        aria-describedby="text-error"
                                     />
                                 </div>
+                                <small>
+                                    All options cannot be shown inside the dropdown
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -293,9 +298,6 @@ function deleteTable(id, tableName) {
                     },
                 });
         },
-        reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
     });
 }
 </script>

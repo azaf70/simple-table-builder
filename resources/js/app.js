@@ -34,7 +34,7 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(ToastService)
             .use(ConfirmationService)
-            .use(PrimeVue, { unstyled: false, pt: Tailwind })
+            .use(PrimeVue, { unstyled: true, pt: Tailwind })
             .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
     },

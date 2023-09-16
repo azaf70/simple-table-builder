@@ -5,7 +5,18 @@
             <h1 class="text-xl py-8 px-2">
                 {{ props.tableData.name }}
             </h1>
+            <div v-if="tableData.columns[0].rows.length === 0">
+                <Message
+                    severity="info"
+                    sticky
+                >
+                    <div class="p-d-flex p-ai-center">
+                        <span class="p-mr-2">No data to display. Please add rows to view table.</span>
+                    </div>
+                </Message>
+            </div>
             <DataTable
+                v-else
                 :value="dataToDisplay"
                 striped-rows
                 table-style="min-width: 50rem"
@@ -29,6 +40,8 @@ import { Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Message from 'primevue/message';
+import Button from 'primevue/button';
 import { onMounted, ref } from 'vue';
 
 const props = defineProps({
